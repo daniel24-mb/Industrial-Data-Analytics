@@ -12,3 +12,4 @@ A practical portfolio showcasing projects and exercises in industrial data analy
 - Machine and sensor data
 - Historians and industrial databases
 - Operational data analysis
+  
