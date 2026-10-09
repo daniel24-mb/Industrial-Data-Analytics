@@ -1,67 +1,86 @@
 # Bright Coffee Shop Sales Analysis
+
 **BrightLearn Data Analytics | Case Study 01**
 **Candidate:** DT Mbenga
 
 ---
 
-## About the case
-Bright Coffee Shop has appointed a new CEO whose goal is to grow revenue and improve product performance.
-As a Junior Data Analyst, my task was to analyse six months of sales data (January to June 2023,
-149,116 sales records across 3 stores) and present insights and recommendations to the CEO.
+## Overview
 
-**Business questions:**
-1. Which products generate the most revenue?
-2. What time of day do the stores perform best?
-3. What are the sales trends across products and time?
-4. What should the business do to improve sales?
+Bright Coffee Shop runs three stores in New York: Astoria, Hell's Kitchen and Lower Manhattan. The new CEO wants to understand sales performance to grow revenue.
 
----
+This project analyses six months of transaction data (1 January to 30 June 2023, 149,116 sales) to answer four questions:
 
-## Approach
-| Stage | Tool | What was done |
+1. Which products and categories generate the most revenue and units?
+2. When are the stores busiest (time of day, day of week, month)?
+3. How do the three stores compare?
+4. What should the business do next?
+
+## Process
+
+Data preparation followed the **CLEAN** framework (Conceptualize, Locate, Evaluate, Augment, Note).
+
+| Stage | What was done | Tool |
 |---|---|---|
-| Planning | Miro | Data flow and architecture diagram, key insights and calculations |
-| Technical inspection | Databricks (SQL) | Checked structure, data types, stores, dates, opening hours, missing values and quantities |
-| Data processing | Databricks (SQL) | Fixed data types and built one summary table (the "big code") |
-| Analysis | Google Sheets, Looker Studio | Pivot tables and dashboard |
-| Presentation | PowerPoint | Insights and recommendations for the CEO |
+| 1. Planning | Mind map of data flow, insights and calculations; project schedule | Miro, Gantt chart |
+| 2. Load | Raw CSV uploaded (semicolon delimiter) to `bright_coffee.sales.coffee_sales_clean` | Databricks |
+| 3. Inspection | Row count, data types, stores and opening hours, missing values, price, date/time and quantity checks | Databricks SQL |
+| 4. Processing | Big code in 4 steps: date labels, 30-minute time slots, revenue = unit_price × quantity, grouped to 130,537 rows | Databricks SQL |
+| 5. Result check | Totals re-calculated to prove no sale was lost: 149,116 sales, 214,470 units, $698,812.33 | Databricks SQL |
+| 6. Analysis | Pivot tables, pivot charts and Store/Month slicers on 5 analysis tabs, plus a CEO dashboard | Excel |
+| 7. Dashboards | Interactive CEO dashboards | Looker Studio, Databricks, Power BI, Lovable |
+| 8. Presentation | Findings and recommendations for the CEO | PowerPoint |
 
-**Methods used:** the CLEAN framework to prepare the data, and the four-pillar framework
-(Define, Dimensions, Visualise, Recommend) to analyse it.
+**Data quality**
+- No missing values; prices and quantities valid (quantities 1–8, prices $0.80–$45.00).
+- The date column carried a hidden midnight time, and the time column a placeholder date (1899-12-31). Both were cleaned in SQL.
+- Revenue is reported in **US dollars** (assumed: no currency field, and all stores are in New York).
+- The data has **no cost information**, so profit could not be calculated.
 
----
+## Summary of key findings
 
-## Data processing summary
-- **Inspection findings:** no missing values; prices loaded correctly; the date carried a midnight time,
-  and the time carried Excel's placeholder date (1899-12-31).
-- **Fixes:** date cast to DATE, time reduced to HH:mm:ss, price cast to 2 decimals.
-- **New columns:** day name, weekday/weekend, month, hour, 30-minute time bucket,
-  time of day (Morning/Afternoon/Evening), and revenue (unit_price x transaction_qty).
-- **Check:** all 149,116 sales and total revenue of $698,812.33 carried through to the summary table.
+| Area | Finding |
+|---|---|
+| Revenue | **$698,812** from **149,116** sales; average sale **$4.69** |
+| Trend | Revenue doubled from **$81.7k (Jan)** to **$166.5k (Jun)**; February was the only dip |
+| Time of day | Mornings drive the business: peak **08:00–10:30** (top slot 10:30, $45.0k); sharp drop at 11:00 |
+| Day of week | Sales evenly spread across the week |
+| Stores | All three stores are close ($230k–$237k); Hell's Kitchen leads slightly |
+| Products | Coffee and Tea make up **74% of units**; Barista Espresso is the top product type ($91.4k) |
+| Slow sellers | Take-home retail items (packaged chocolate, loose tea, coffee beans) sell the least |
 
----
+**Recommendations**
+- Staff up for the 08:00–10:30 morning peak.
+- Build afternoon promotions to lift sales after 11:00.
+- Bundle slow retail items with top coffee drinks.
+- Protect Coffee and Tea availability; they drive most of the units.
 
-## Key findings
-- Revenue peaks in the **morning (08:00 to 10:30)**, at about $45k per 30-minute slot.
-- Revenue drops sharply after 10:30 and stays flat through the afternoon (about $20k per slot).
-- The slowest period is 20:00 to 20:30.
-- *(To be completed: top products, store comparison, monthly trend.)*
+## Tools used
 
----
+| Tool | Used for |
+|---|---|
+| Miro | Mind map planning |
+| Databricks (SQL) | Storage, inspection and data processing |
+| Microsoft Excel | Pivot tables, pivot charts, slicers and CEO dashboard |
+| Looker Studio | Web dashboard |
+| Databricks Dashboard | SQL dashboard (KPIs, store share, store × month, day × time heat map) |
+| Power BI | Interactive dashboard (stores, day of week, bottom products, month-on-month) |
+| Lovable | AI-built web dashboard |
+| PowerPoint | CEO presentation |
+| GitHub | Project repository |
 
-## What I learned
-- Inspect the data before changing it: inspection revealed the delimiter and date and time issues.
-- Keep the raw data untouched and do all cleaning in SQL, so every change is documented.
-- Build a large query step by step, testing each part before adding the next.
-- Use CASE to create business categories, and COUNT/SUM with GROUP BY to summarise data.
-- Choose the right chart: line or bar charts for time, pie charts only for a few categories.
+## Repository structure
 
----
-
-## Folder contents
 | Folder | Contents |
 |---|---|
-| Project Description & Raw Data | Case study brief and original dataset |
-| Project Planning | Miro diagram |
-| Data Processing | SQL code and processed spreadsheet with pivot tables and charts |
-| Project Presentation | CEO presentation |
+| `01_Project_Description` | Case study brief (PDF) and raw sales data (CSV) |
+| `02_Planning` | Miro mind map (PDF) and Gantt chart |
+| `03_Data_Processing` | `Bright_Coffee_Shop_SQL_Code_DT_Mbenga.sql` and `Bright_Coffee_Shop_Data_Processing_DT_Mbenga.xlsx` |
+| `04_Presentation` | Looker Studio, Databricks, Power BI and Lovable dashboards, and the CEO presentation |
+
+## What I learned
+
+- Inspect before processing: the date/time and price issues were only found through inspection.
+- Keep processing in one documented, repeatable query.
+- Check totals after every step, so every tool shows the same numbers.
+- Each tool has a strength: SQL to prepare, Excel to analyse, BI tools to present interactively.
